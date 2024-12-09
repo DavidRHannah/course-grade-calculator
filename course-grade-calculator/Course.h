@@ -25,6 +25,7 @@ public:
 	Course(const string& name);
 
 	// Accessors
+	bool isGroup(const string& groupName) const;
 
 	// Mutators
 	void addGroup(const string& name, float weight);

@@ -5,6 +5,22 @@ Course::Course(const string& name)
 	this->m_name = name;
 }
 
+bool Course::isGroup(const string& groupName) const
+{
+	if (this->m_groups.empty())
+	{
+		return false;
+	}
+
+	for (auto& group : this->m_groups)
+	{
+		if (groupName == group.getName())
+			return true;
+	}
+
+	return false;
+}
+
 void Course::addGroup(const string& name, float weight)
 {
 	m_groups.push_back(Group(name, weight));
@@ -73,20 +89,40 @@ void Course::loadFromFile(const string& filename)
 
 	while (std::getline(file, line))
 	{
-		if (!line.empty() && line.find(",") != string::npos)
+		if (!line.empty())
 		{
 			groupRows.push_back(line);
-		}
-		else if (!groupRows.empty())
-		{
-			m_groups.push_back(Group::fromCSV(groupRows));
-			groupRows.clear();
 		}
 	}
 
 	if (!groupRows.empty())
 	{
-		m_groups.push_back(Group::fromCSV(groupRows));
+		for (auto& row : groupRows)
+		{
+			vector<string> tokenizedRow;
+			std::istringstream iss(row);
+			string str;
+			while (std::getline(iss, str, ','))
+			{
+				tokenizedRow.push_back(str);
+			}
+
+			string groupName = tokenizedRow[0];
+			float weight = std::stof(tokenizedRow[1]);
+			string assignmentName = tokenizedRow[2];
+			float pe = std::stof(tokenizedRow[3]);
+			int pt = std::stoi(tokenizedRow[4]);
+
+			if (isGroup(groupName))
+			{
+				this->addAssignment(groupName, assignmentName, pe, pt);
+			}
+			else
+			{
+				this->addGroup(groupName, weight);
+				this->addAssignment(groupName, assignmentName, pe, pt);
+			}
+		}
 	}
 
 	file.close();

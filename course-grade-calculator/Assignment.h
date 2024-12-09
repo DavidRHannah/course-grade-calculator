@@ -33,21 +33,7 @@ public:
 
 	// Console Output
 	void display() const;
+
 	// File Methods
 	string toCSV() const;
-	inline static Assignment fromCSV(const string& csv)
-	{
-		std::istringstream iss(csv);
-		string name;
-		float pe;
-		int pt;
-		std::getline(iss, name, ',');
-		std::getline(iss, name, ',');
-		std::getline(iss, name, ',');
-		iss >> pe;
-		iss.ignore(1, ',');
-		iss >> pt;
-
-		return Assignment(name, pe, pt);
-	}
 };

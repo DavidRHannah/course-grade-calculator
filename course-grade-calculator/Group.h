@@ -42,25 +42,4 @@ public:
 	
 	// File Methods
 	string toCSV() const;
-	inline static Group fromCSV(const vector<string>& csvRows)
-	{
-		if (csvRows.empty()) return Group("", 0);
-
-		std::istringstream iss(csvRows[0]);
-		string groupName;
-		float weight;
-		std::getline(iss, groupName, ',');
-		iss >> weight;
-		iss.ignore(1, ',');
-
-		Group group(groupName, weight);
-
-		for (const auto& row : csvRows)
-		{
-			;
-			group.addAssignment(Assignment::fromCSV(row));
-		}
-
-		return group;
-	}
 };
