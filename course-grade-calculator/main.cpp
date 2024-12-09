@@ -1,10 +1,17 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
+#include <iomanip>
+
 using std::string;
 using std::vector;
 using std::cout;
+using std::cin;
 using std::endl;
+using std::ofstream;
+using std::ifstream;
 
 class Assignment {
 	private:
@@ -36,6 +43,26 @@ class Assignment {
 				<< this->getPointTotal()
 				<< endl;
 		}
+		string toCSV() const {
+			std::ostringstream oss;
+			oss << m_name << "," << m_pointsEarned << "," << m_pointTotal;
+			return oss.str();
+		}
+
+		inline static Assignment fromCSV(const string& csv) {
+			std::istringstream iss(csv);
+			string name;
+			float pe;
+			int pt;
+			std::getline(iss, name, ',');
+			std::getline(iss, name, ',');
+			std::getline(iss, name, ',');
+			iss >> pe;
+			iss.ignore(1, ',');
+			iss >> pt;
+
+			return Assignment(name, pe, pt);
+		}
 };
 
 class Group {
@@ -51,6 +78,9 @@ class Group {
 		}
 		void addAssignment(const string& name, float pe, int pt) {
 			m_assignments.push_back(Assignment(name, pe, pt));
+		}
+		void addAssignment(const Assignment& assignment) {
+			m_assignments.push_back(assignment);
 		}
 		string getName() const {
 			return this->m_name;
@@ -106,6 +136,32 @@ class Group {
 			}
 			cout << endl;
 		}
+		string toCSV() const {
+			std::ostringstream oss;
+			for (const auto& assignment : m_assignments) {
+				oss << m_name << "," << m_weight << "," << assignment.toCSV() << "\n";
+			}
+			return oss.str();
+		}
+
+		inline static Group fromCSV(const vector<string>& csvRows) {
+			if (csvRows.empty()) return Group("", 0);
+
+			std::istringstream iss(csvRows[0]);
+			string groupName;
+			float weight;
+			std::getline(iss, groupName, ',');
+			iss >> weight;
+			iss.ignore(1, ',');
+
+			Group group(groupName, weight);
+
+			for (const auto& row : csvRows) {;
+				group.addAssignment(Assignment::fromCSV(row));
+			}
+
+			return group;
+		}
 };
 
 class Course {
@@ -118,6 +174,9 @@ class Course {
 		}
 		void addGroup(const string& name, float weight) {
 			m_groups.push_back(Group(name, weight));
+		}
+		void addGroup(const Group& group) { 
+			m_groups.push_back(group); 
 		}
 		void addAssignment(const string& groupName, const string& assignmentName, float pe, int pt) {
 			for (auto& group : this->m_groups) {
@@ -138,47 +197,110 @@ class Course {
 			cout << "Expected Grade: " << (totalPointsEarned / totalPoints) * 100.0f << endl;
 			cout << endl;
 		}
+		void saveToFile(const string& filename) const {
+			ofstream file(filename);
+			if (!file) {
+				cout << "Error opening file for writing." << endl;
+				return;
+			}
+
+			for (const auto& group : m_groups) {
+				file << group.toCSV();
+			}
+
+			file.close();
+		}
+
+		void loadFromFile(const string& filename) {
+			ifstream file(filename);
+			if (!file) {
+				cout << "Error opening file for reading." << endl;
+				return;
+			}
+
+			m_groups.clear();
+			string line;
+			vector<string> groupRows;
+
+			while (std::getline(file, line)) {
+				if (!line.empty() && line.find(",") != string::npos) {
+					groupRows.push_back(line);
+				}
+				else if (!groupRows.empty()) {
+					m_groups.push_back(Group::fromCSV(groupRows));
+					groupRows.clear();
+				}
+			}
+
+			if (!groupRows.empty()) {
+				m_groups.push_back(Group::fromCSV(groupRows));
+			}
+
+			file.close();
+		}
 };
 
+void addData(Course& course) {
+	string groupName, assignmentName;
+	float weight, pointsEarned;
+	int pointTotal;
+
+	cout << "Enter group name: ";
+	cin >> groupName;
+	cout << "Enter group weight (0.0 to 1.0): ";
+	cin >> weight;
+
+	Group group(groupName, weight);
+	cout << "Enter assignments for this group (type 'done' to finish):" << endl;
+
+	while (1) {
+		cout << "Assignment name (or 'done'): ";
+		cin >> assignmentName;
+		if (assignmentName == "done") break;
+		cout << "Points earned: ";
+		cin >> pointsEarned;
+		cout << "Point total: ";
+		cin >> pointTotal;
+
+		group.addAssignment(Assignment(assignmentName, pointsEarned, pointTotal));
+	}
+
+	course.addGroup(group);
+}
 
 int main() {
 	std::cout << "CalcuBot!\n";
 
-	// Test Data
-	Course course("STAT155");
-	
-	course.addGroup("Quizzes", 0.15f);
+	Course course("My Course");
+	int choice;
 
-	course.addAssignment("Quizzes", "CH 1 Quiz (terminology)", 95, 100);
-	course.addAssignment("Quizzes", "CH 1 Quiz (visual descriptive statistics)", 93.33f, 100);
-	course.addAssignment("Quizzes", "CH 2 Quiz (event terminology, notation, and relationships", 100, 100);
-	course.addAssignment("Quizzes", "CH 2 Quiz (counting rules and probability", 100, 100);
-	course.addAssignment("Quizzes", "CH 3 Quiz (discrete rvs)", 100, 100);
-	course.addAssignment("Quizzes", "CH 4 Quiz (continuous rvs)", 94, 100);
-	//course.addAssignment("Quizzes", "CH 4 Quiz (normal distribution)", 83.17f, 100); // Lowest score dropped
-	course.addAssignment("Quizzes", "CH 5 Quiz (joint probability distributions)", 100, 100);
-	course.addAssignment("Quizzes", "CH 5 Quiz (sampling distributions)", 92, 100);
+	while (true) {
+		cout << "1. Add Data\n2. Display\n3. Save\n4. Load\n5. Exit\nChoice: ";
+		cin >> choice;
 
-	course.addGroup("Homework", 0.15f);
-
-	course.addAssignment("Homework", "HW 1", 50, 50);
-	course.addAssignment("Homework", "HW 2", 50, 50);
-	//course.addAssignment("Homework", "HW 3", 49, 50); // Lowest score dropped
-	course.addAssignment("Homework", "HW 4", 49.5, 50);
-	course.addAssignment("Homework", "HW 5", 50, 50);
-
-	course.addGroup("Attendance", 0.1f);
-	course.addAssignment("Attendance", "TOTAL", 84, 90);
-
-	course.addGroup("Exam 1", 0.3f);
-	course.addAssignment("Exam 1", "Exam 1 Raw Score", 77, 94);
-	course.addAssignment("Exam 1", "Exam 1 Practice Submission", 6, 6);
-	
-	course.addGroup("Exam 2", 0.3f);
-	course.addAssignment("Exam 2", "Exam 2 Raw Score", 77, 94);
-	course.addAssignment("Exam 2", "Exam 2 Practice Submission", 6, 6);
-
-	course.display();
-
+		switch (choice) {
+		case 1:
+			bool continueAddDataInput = true;
+			string groupName = "";
+			while (continueAddDataInput) {
+				
+			}
+			/*addData(course);*/
+			break;
+		case 2:
+			course.display();
+			break;
+		case 3:
+			course.saveToFile("course.csv");
+			break;
+		case 4:
+			course.loadFromFile("course.csv");
+			break;
+		case 5:
+			return 0;
+		default:
+			cout << "Invalid choice." << endl;
+		}
+	}
 	return 0;
 }
