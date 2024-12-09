@@ -56,12 +56,7 @@ int main() {
 
 		switch (choice) {
 		case 1:
-			//bool continueAddDataInput = true;
-			/*string groupName = "";*/
-			/*while (continueAddDataInput) {
-				
-			}*/
-			/*addData(course);*/
+			addData(course);
 			break;
 		case 2:
 			course.display();

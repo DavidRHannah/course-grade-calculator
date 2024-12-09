@@ -45,15 +45,13 @@ void Course::addAssignment(const string& groupName, const string& assignmentName
 void Course::display() const
 {
 	cout << endl;
-	float totalPointsEarned = 0.0f;
-	int totalPoints = 0;
+	float grade = 0.0f;
 	for (auto& group : this->m_groups)
 	{
 		group.display();
-		totalPointsEarned += group.getTotalEarnedPoints();
-		totalPoints += group.getTotalPoints();
+		grade += group.getGroupContribution();
 	}
-	cout << "Expected Grade: " << (totalPointsEarned / totalPoints) * 100.0f << endl;
+	cout << "Expected Grade: " << grade << endl;
 	cout << endl;
 }
 

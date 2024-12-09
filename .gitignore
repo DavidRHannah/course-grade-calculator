@@ -1,3 +1,5 @@
+course.csv
+
 # Prerequisites
 *.d
 
@@ -431,3 +433,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/course-grade-calculator/course.csv
