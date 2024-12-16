@@ -7,6 +7,7 @@
 #include "Course.h"
 #include "Group.h"
 #include "Assignment.h"
+#include "Menu.h"
 
 using std::string;
 using std::vector;
@@ -45,33 +46,33 @@ void addData(Course& course) {
 }
 
 int main() {
-	std::cout << "CalcuBot!\n";
-
 	Course course("My Course");
-	int choice;
-
+	unsigned int optionCount = 5;
+	Menu menu(optionCount);
+	int c = 0;
+	int selected = 1;
+	std::string inp;
 	while (true) {
-		cout << "1. Add Data\n2. Display\n3. Save\n4. Load\n5. Exit\nChoice: ";
-		cin >> choice;
-
-		switch (choice) {
-		case 1:
-			addData(course);
+		c = 0;
+		switch ((c = _getch())) {
+		case KEY_UP:
+			if (selected == 1)
+				selected = optionCount;
+			else
+				selected--;
+			menu.menu(selected);
 			break;
-		case 2:
-			course.display();
+		case KEY_DOWN:
+			if (selected == optionCount)
+				selected = 1;
+			else
+				selected += 1;
+			menu.menu(selected);
 			break;
-		case 3:
-			course.saveToFile("course.csv");
+		default: 
 			break;
-		case 4:
-			course.loadFromFile("course.csv");
-			break;
-		case 5:
-			return 0;
-		default:
-			cout << "Invalid choice." << endl;
 		}
 	}
+
 	return 0;
 }
