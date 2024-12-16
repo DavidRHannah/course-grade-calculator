@@ -21,6 +21,11 @@ bool Course::isGroup(const string& groupName) const
 	return false;
 }
 
+vector<Group> Course::getGroups() const
+{
+	return this->m_groups;
+}
+
 void Course::addGroup(const string& name, float weight)
 {
 	m_groups.push_back(Group(name, weight));
@@ -55,73 +60,11 @@ void Course::display() const
 	cout << endl;
 }
 
-void Course::saveToFile(const string& filename) const
+string Course::toCSV() const
 {
-	ofstream file(filename);
-	if (!file)
-	{
-		cout << "Error opening file for writing." << endl;
-		return;
-	}
-
-	for (const auto& group : m_groups)
-	{
-		file << group.toCSV();
-	}
-
-	file.close();
+	std::ostringstream oss;
+	for (const auto& group : this->m_groups)
+		oss << this->m_name << "," << group.toCSV();
+	return oss.str();
 }
 
-void Course::loadFromFile(const string& filename)
-{
-	ifstream file(filename);
-	if (!file)
-	{
-		cout << "Error opening file for reading." << endl;
-		return;
-	}
-
-	m_groups.clear();
-	string line;
-	vector<string> groupRows;
-
-	while (std::getline(file, line))
-	{
-		if (!line.empty())
-		{
-			groupRows.push_back(line);
-		}
-	}
-
-	if (!groupRows.empty())
-	{
-		for (auto& row : groupRows)
-		{
-			vector<string> tokenizedRow;
-			std::istringstream iss(row);
-			string str;
-			while (std::getline(iss, str, ','))
-			{
-				tokenizedRow.push_back(str);
-			}
-
-			string groupName = tokenizedRow[0];
-			float weight = std::stof(tokenizedRow[1]);
-			string assignmentName = tokenizedRow[2];
-			float pe = std::stof(tokenizedRow[3]);
-			int pt = std::stoi(tokenizedRow[4]);
-
-			if (isGroup(groupName))
-			{
-				this->addAssignment(groupName, assignmentName, pe, pt);
-			}
-			else
-			{
-				this->addGroup(groupName, weight);
-				this->addAssignment(groupName, assignmentName, pe, pt);
-			}
-		}
-	}
-
-	file.close();
-}

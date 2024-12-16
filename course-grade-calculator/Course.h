@@ -26,6 +26,8 @@ public:
 
 	// Accessors
 	bool isGroup(const string& groupName) const;
+	vector<Group> getGroups() const;
+
 
 	// Mutators
 	void addGroup(const string& name, float weight);
@@ -36,6 +38,5 @@ public:
 	void display() const;
 	
 	// File Methods
-	void saveToFile(const string& filename) const;
-	void loadFromFile(const string& filename);
+	string toCSV() const;
 };

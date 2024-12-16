@@ -82,8 +82,6 @@ string Group::toCSV() const
 {
 	std::ostringstream oss;
 	for (const auto& assignment : m_assignments)
-	{
 		oss << m_name << "," << m_weight << "," << assignment.toCSV() << "\n";
-	}
 	return oss.str();
 }

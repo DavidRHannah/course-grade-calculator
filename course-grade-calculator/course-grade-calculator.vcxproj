@@ -132,12 +132,14 @@
     <ClCompile Include="Group.cpp" />
     <ClCompile Include="Assignment.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Quarter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Course.h" />
     <ClInclude Include="Group.h" />
     <ClInclude Include="Assignment.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="Quarter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
