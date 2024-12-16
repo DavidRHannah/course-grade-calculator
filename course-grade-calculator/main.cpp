@@ -1,78 +1,83 @@
 #include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
 #include <vector>
-#include <iomanip>
+#include "Menu.h"
 #include "Course.h"
 #include "Group.h"
 #include "Assignment.h"
-#include "Menu.h"
 
-using std::string;
-using std::vector;
 using std::cout;
 using std::cin;
 using std::endl;
-using std::ofstream;
-using std::ifstream;
 
+// Define actions for the menu
 void addData(Course& course) {
-	string groupName, assignmentName;
-	float weight, pointsEarned;
-	int pointTotal;
+    std::string groupName, assignmentName;
+    float weight, pointsEarned;
+    int pointTotal;
 
-	cout << "Enter group name: ";
-	cin >> groupName;
-	cout << "Enter group weight (0.0 to 1.0): ";
-	cin >> weight;
+    cout << "Enter group name: ";
+    cin >> groupName;
+    cout << "Enter group weight (0.0 to 1.0): ";
+    cin >> weight;
 
-	Group group(groupName, weight);
-	cout << "Enter assignments for this group (type 'done' to finish):" << endl;
+    Group group(groupName, weight);
+    cout << "Enter assignments for this group (type 'done' to finish):" << endl;
 
-	while (1) {
-		cout << "Assignment name (or 'done'): ";
-		cin >> assignmentName;
-		if (assignmentName == "done") break;
-		cout << "Points earned: ";
-		cin >> pointsEarned;
-		cout << "Point total: ";
-		cin >> pointTotal;
+    while (true) {
+        cout << "Assignment name (or 'done'): ";
+        cin >> assignmentName;
+        if (assignmentName == "done") break;
+        cout << "Points earned: ";
+        cin >> pointsEarned;
+        cout << "Point total: ";
+        cin >> pointTotal;
 
-		group.addAssignment(Assignment(assignmentName, pointsEarned, pointTotal));
-	}
+        group.addAssignment(Assignment(assignmentName, pointsEarned, pointTotal));
+    }
 
-	course.addGroup(group);
+    course.addGroup(group);
+}
+
+void displayData(Course& course) {
+    course.display();
+}
+
+void saveData(Course& course) {
+    course.saveToFile("course.csv");
+    cout << "Data saved successfully.\n";
+}
+
+void loadData(Course& course) {
+    course.loadFromFile("course.csv");
+    cout << "Data loaded successfully.\n";
 }
 
 int main() {
-	Course course("My Course");
-	unsigned int optionCount = 5;
-	Menu menu(optionCount);
-	int c = 0;
-	int selected = 1;
-	std::string inp;
-	while (true) {
-		c = 0;
-		switch ((c = _getch())) {
-		case KEY_UP:
-			if (selected == 1)
-				selected = optionCount;
-			else
-				selected--;
-			menu.menu(selected);
-			break;
-		case KEY_DOWN:
-			if (selected == optionCount)
-				selected = 1;
-			else
-				selected += 1;
-			menu.menu(selected);
-			break;
-		default: 
-			break;
-		}
-	}
+    Course course("My Course");
 
-	return 0;
+    // Create menu labels and actions
+    std::vector<std::string> labels = {
+        "1. Add Data",
+        "2. Display Data",
+        "3. Save Data",
+        "4. Load Data",
+        "5. Exit"
+    };
+
+    std::vector<std::function<void()>> actions = {
+        [&]() { addData(course); },     // Lambda to call addData
+        [&]() { displayData(course); }, // Lambda to call displayData
+        [&]() { saveData(course); },    // Lambda to call saveData
+        [&]() { loadData(course); },    // Lambda to call loadData
+        [&]() { exit(0); }              // Lambda to exit program
+    };
+
+    // Initialize and run the menu
+    Menu menu(labels, actions);
+    while (true) {
+        menu.run();
+        system("pause"); // Wait before redisplaying menu
+    }
+
+    return 0;
 }
