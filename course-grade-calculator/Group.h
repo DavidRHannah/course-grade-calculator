@@ -22,10 +22,8 @@ private:
 	float m_weight;
 	vector<Assignment> m_assignments;
 public:
-	// Constructors
 	Group(const string& name, float weight);
-	
-	// Accessors
+
 	string getName() const;
 	float getWeight() const;
 	vector<Assignment> getAssignments() const;
@@ -33,13 +31,10 @@ public:
 	int getTotalPoints() const;
 	float getGroupContribution() const;
 	
-	// Mutators
 	void addAssignment(const string& name, float pe, int pt);
 	void addAssignment(const Assignment& assignment);
 	
-	// Console Output
 	void display() const;
 	
-	// File Methods
 	string toCSV() const;
 };

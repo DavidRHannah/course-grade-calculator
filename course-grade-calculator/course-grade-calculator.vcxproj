@@ -133,11 +133,13 @@
     <ClCompile Include="Assignment.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Quarter.cpp" />
+    <ClCompile Include="CSVManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Course.h" />
     <ClInclude Include="Group.h" />
     <ClInclude Include="Assignment.h" />
+    <ClInclude Include="CSVManager.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Quarter.h" />
   </ItemGroup>

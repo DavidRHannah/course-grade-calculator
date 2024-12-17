@@ -21,22 +21,17 @@ private:
 	string m_name;
 	vector<Group> m_groups;
 public:
-	// Constructors
 	Course(const string& name);
 
-	// Accessors
 	bool isGroup(const string& groupName) const;
 	vector<Group> getGroups() const;
 
-
-	// Mutators
+	string getName() const;
 	void addGroup(const string& name, float weight);
 	void addGroup(const Group& group);
 	void addAssignment(const string& groupName, const string& assignmentName, float pe, int pt);
 
-	// Console Output
 	void display() const;
 	
-	// File Methods
 	string toCSV() const;
 };

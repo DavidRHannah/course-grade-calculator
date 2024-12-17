@@ -4,12 +4,12 @@
 #include "Course.h"
 #include "Group.h"
 #include "Assignment.h"
+#include "CSVManager.h"
 
 using std::cout;
 using std::cin;
 using std::endl;
 
-// Define actions for the menu
 void addData(Course& course) {
     std::string groupName, assignmentName;
     float weight, pointsEarned;
@@ -43,41 +43,49 @@ void displayData(Course& course) {
 }
 
 void saveData(Course& course) {
-    course.saveToFile("course.csv");
+    //course.saveToFile("course.csv");
     cout << "Data saved successfully.\n";
-}
+} 
 
 void loadData(Course& course) {
-    course.loadFromFile("course.csv");
+    //course.loadFromFile("course.csv");
     cout << "Data loaded successfully.\n";
 }
 
 int main() {
     Course course("My Course");
 
-    // Create menu labels and actions
+    
     std::vector<std::string> labels = {
         "1. Add Data",
         "2. Display Data",
         "3. Save Data",
         "4. Load Data",
-        "5. Exit"
+        "5. Exit",
     };
-
     std::vector<std::function<void()>> actions = {
-        [&]() { addData(course); },     // Lambda to call addData
-        [&]() { displayData(course); }, // Lambda to call displayData
-        [&]() { saveData(course); },    // Lambda to call saveData
-        [&]() { loadData(course); },    // Lambda to call loadData
-        [&]() { exit(0); }              // Lambda to exit program
+        [&]() { addData(course); },
+        [&]() { displayData(course); },
+        [&]() { saveData(course); },
+        [&]() { loadData(course); },
+        [&]() { exit(0); },
     };
 
-    // Initialize and run the menu
     Menu menu(labels, actions);
-    while (true) {
-        menu.run();
-        system("pause"); // Wait before redisplaying menu
-    }
+    auto data = CSVManager::readCSV("course.csv");
+
+    CSVManager::displayCSV(data);
+
+    CSVManager::modifyData(data, 1, 2, "MODIFIED");
+
+    CSVManager::writeCSV("course.csv", data);
+    CSVManager::displayCSV(data);
+
+  /*  while (true) 
+    {
+        menu.run(); 
+        system("pause");
+    }*/
 
     return 0;
 }

@@ -14,13 +14,13 @@ constexpr auto KEY_ENTER = 13;
 
 class Menu {
 private:
-    unsigned int optionCount;
-    vector<string> labels;
-    vector<function<void()>> actions;
+    unsigned int m_optionCount;
+    vector<string> m_labels;
+    vector<function<void()>> m_actions;
 
 public:
     Menu(const vector<string>& labels, const vector<function<void()>>& actions);
     void run() const;
 private:
-    void displayMenu(int selected) const;
+    void display(int selected) const;
 };

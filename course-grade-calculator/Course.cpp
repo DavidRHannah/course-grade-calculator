@@ -26,6 +26,11 @@ vector<Group> Course::getGroups() const
 	return this->m_groups;
 }
 
+string Course::getName() const
+{
+	return m_name;
+}
+
 void Course::addGroup(const string& name, float weight)
 {
 	m_groups.push_back(Group(name, weight));

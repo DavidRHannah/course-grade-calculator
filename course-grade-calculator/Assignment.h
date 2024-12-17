@@ -21,19 +21,13 @@ private:
 	float m_pointsEarned;
 	int m_pointTotal;
 public:
-	// Constructors
 	Assignment(const string& name, float pe, int pt);
 	
-	// Accessors
 	string getName() const;
 	float getPointsEarned() const;
 	int getPointTotal() const;
 
-	// Mutators
-
-	// Console Output
 	void display() const;
 
-	// File Methods
 	string toCSV() const;
 };
