@@ -6,6 +6,7 @@
 #include <vector>
 #include <iomanip>
 #include "Group.h"
+#include "CSVManager.h"
 
 using std::string;
 using std::vector;
@@ -34,4 +35,5 @@ public:
 	void display() const;
 	
 	string toCSV() const;
+	void saveToCSV(const string& filename);
 };

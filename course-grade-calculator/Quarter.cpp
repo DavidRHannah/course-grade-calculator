@@ -19,20 +19,44 @@ void Quarter::display() const
 
 void Quarter::saveToCSV(const std::string& filename) const
 {
-    std::ofstream file(filename);
-    if (!file.is_open())
+    vector<vector<string>> data;
+
+    static const vector<string> csvFormat = {
+        "Quarter",
+        "Course",
+        "Group",
+        "Assignment",
+        "PointsEarned",
+        "PointTotal"
+    };
+
+    data.push_back(csvFormat);
+    for (const auto& course : m_courses)
     {
-        std::cerr << "Failed to open file: " << filename << "\n";
-        return;
+        vector<string> row;
+        row.push_back(course.getName());
+        data.push_back(row);
+
+        for (const auto& group : course.getGroups())
+        {
+            row.clear();
+            row.push_back(group.getName());
+            row.push_back(std::to_string(group.getWeight()));
+            data.push_back(row);
+
+            for (const auto& assignment : group.getAssignments())
+            {
+                row.clear();
+                row.push_back(assignment.getName());
+                row.push_back(std::to_string(assignment.getPointsEarned()));
+                row.push_back(std::to_string(assignment.getPointTotal()));
+                data.push_back(row);
+            }
+        }
     }
 
-    file << "Quarter,Course,Group,Assignment,PointsEarned,PointTotal\n";
-    //for (const auto& course : this->m_courses)
-    //{
-    //    course.toCSV(file, m_name); // Pass quarter name to Course
-    //}
+    CSVManager::writeCSV(filename, data);
 
-    file.close();
     std::cout << "Data saved successfully to " << filename << ".\n";
 }
 
@@ -51,17 +75,8 @@ void Quarter::loadFromCSV(const std::string& filename)
     while (std::getline(file, line))
     {
         std::istringstream ss(line);
-        std::string quarterName, courseName, groupName, assignmentName;
+        std::string courseName, groupName, assignmentName;
         double pointsEarned, pointsTotal;
-
-        std::getline(ss, quarterName, ',');
-        std::getline(ss, courseName, ',');
-        std::getline(ss, groupName, ',');
-        std::getline(ss, assignmentName, ',');
-        ss >> pointsEarned;
-        ss.ignore();
-        ss >> pointsTotal;
-
         addEntry(courseName, groupName, assignmentName, pointsEarned, pointsTotal);
     }
 
@@ -69,8 +84,20 @@ void Quarter::loadFromCSV(const std::string& filename)
     std::cout << "Data loaded successfully from " << filename << ".\n";
 }
 
-void Quarter::addEntry(const std::string& cName, const std::string& gName,
-              const std::string& aName, double pe, double pt)
+void Quarter::loadFromCSV(const std::string& filename)
+{
+    vector<vector<string>> data = CSVManager::readCSV(filename);
+    m_courses.clear();
+
+    for (const auto& row : data)
+    {
+        std::string courseName, groupName, weight, assignmentName, pointsEarned, pointTotal;
+    }
+}
+
+void Quarter::addEntry(const std::string& cName, const std::string& gName, 
+                       const std::string& weight, const std::string& aName, 
+                       const std::string& pe, const std::string& pt)
 {
     Course* course = nullptr;
     for (auto& c : this->m_courses)
@@ -83,8 +110,13 @@ void Quarter::addEntry(const std::string& cName, const std::string& gName,
     }
     if (!course)
     {
-        this->m_courses.emplace_back(cName);
-        course = &this->m_courses.back();
+        Assignment newAssignment(aName, stof(pe), stoi(pt));
+        Group newGroup(gName, stof(weight));
+        newGroup.addAssignment(newAssignment);
+        course->addGroup(newGroup);
+
+        m_courses.emplace_back(cName);
+        course = &m_courses.back();
     }
 
     Group* group = nullptr;
@@ -93,7 +125,7 @@ void Quarter::addEntry(const std::string& cName, const std::string& gName,
         if (g.getName() == gName)
         {
             group = &g;
-            break;
+            return;
         }
     }
     if (!group)
@@ -102,5 +134,5 @@ void Quarter::addEntry(const std::string& cName, const std::string& gName,
         group = &course->getGroups().back();
     }
 
-    group->addAssignment(Assignment(aName, pe, pt));
+    group->addAssignment(Assignment(aName, stod(pe), stod(pt)));
 }

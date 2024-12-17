@@ -73,3 +73,20 @@ string Course::toCSV() const
 	return oss.str();
 }
 
+void Course::saveToCSV(const string& filename)
+{
+	vector<vector<string>> data;
+
+	data.push_back({m_name});
+	for (const auto& group : m_groups)
+	{
+		data.push_back({group.getName(), std::to_string(group.getWeight())});
+		for (const auto& assignment : group.getAssignments())
+		{
+			data.push_back({assignment.getName(), std::to_string(assignment.getPointsEarned()), std::to_string(assignment.getPointTotal())});
+		}
+	}
+
+	CSVManager::writeCSV(filename, data);
+}
+
