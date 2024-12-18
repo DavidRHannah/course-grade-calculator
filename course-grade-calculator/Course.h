@@ -21,19 +21,11 @@ class Course
 private:
 	string m_name;
 	vector<Group> m_groups;
+	bool isGroup(const string& groupName) const;
 public:
 	Course(const string& name);
-
-	bool isGroup(const string& groupName) const;
 	vector<Group> getGroups() const;
-
 	string getName() const;
-	void addGroup(const string& name, float weight);
 	void addGroup(const Group& group);
-	void addAssignment(const string& groupName, const string& assignmentName, float pe, int pt);
-
 	void display() const;
-	
-	string toCSV() const;
-	void saveToCSV(const string& filename);
 };

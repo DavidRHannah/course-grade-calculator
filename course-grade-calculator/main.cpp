@@ -55,7 +55,6 @@ void loadData(Course& course) {
 int main() {
     Course course("My Course");
 
-    
     std::vector<std::string> labels = {
         "1. Add Data",
         "2. Display Data",
@@ -73,12 +72,6 @@ int main() {
 
     Menu menu(labels, actions);
     auto data = CSVManager::readCSV("course.csv");
-
-    CSVManager::displayCSV(data);
-
-    CSVManager::modifyData(data, 1, 2, "MODIFIED");
-
-    CSVManager::writeCSV("course.csv", data);
     CSVManager::displayCSV(data);
 
   /*  while (true) 

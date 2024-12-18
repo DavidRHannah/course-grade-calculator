@@ -31,10 +31,7 @@ public:
 	int getTotalPoints() const;
 	float getGroupContribution() const;
 	
-	void addAssignment(const string& name, float pe, int pt);
 	void addAssignment(const Assignment& assignment);
 	
 	void display() const;
-	
-	string toCSV() const;
 };

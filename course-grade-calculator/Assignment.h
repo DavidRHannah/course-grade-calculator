@@ -28,6 +28,4 @@ public:
 	int getPointTotal() const;
 
 	void display() const;
-
-	string toCSV() const;
 };

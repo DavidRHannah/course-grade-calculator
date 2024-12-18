@@ -7,17 +7,16 @@
 #include "Course.h"
 #include "CSVManager.h"
 
+using std::string;
+using std::vector;
+
 class Quarter {
 private:
-    std::string m_name;
-    std::vector<Course> m_courses;
+    string m_name;
+    vector<Course> m_courses;
 public:
-    Quarter(const std::string& name);
+    Quarter(const string& name);
     void addCourse(const Course& course);
-    void addEntry(const std::string& cName, const std::string& gName,
-                  const std::string& weight, const std::string& aName,
-                  const std::string& pe, const std::string& pt);
-    void saveToCSV(const std::string& filename) const;
-    void loadFromCSV(const std::string& filename);
+
     void display() const;
-};
+}; 

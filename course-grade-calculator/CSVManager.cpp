@@ -46,7 +46,7 @@ void CSVManager::writeCSV(const string& filename, const vector<vector<string>>& 
 
     for (const auto& row : data)
     {
-        for (size_t i = 0; i < row.size(); ++i)
+        for (int i = 0; i < row.size(); ++i)
         {
             file << row[i];
             if (i != row.size() - 1)
