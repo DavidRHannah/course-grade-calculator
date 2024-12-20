@@ -18,20 +18,22 @@ using std::ifstream;
 class Group
 {
 private:
-	string m_name;
-	float m_weight;
-	vector<Assignment> m_assignments;
+    string m_name;
+    double m_weight;
+    vector<Assignment> m_assignments;
 public:
-	Group(const string& name, float weight);
-
-	string getName() const;
-	float getWeight() const;
-	vector<Assignment> getAssignments() const;
-	float getTotalEarnedPoints() const;
-	int getTotalPoints() const;
-	float getGroupContribution() const;
-	
-	void addAssignment(const Assignment& assignment);
-	
-	void display() const;
+    Group(const string& name, double weight, const vector<Assignment>& assignments);
+    Group();
+    void setName(const string& name);
+    void setWeight(double weight);
+    void addAssignment(const Assignment& assignment);
+    string toCSV() const;
+    void fromCSV(std::istream& stream);
+    void display() const;
+    /*string getName() const;
+    double getWeight() const;
+    vector<Assignment> getAssignments() const;
+    double getTotalEarnedPoints() const;
+    double getTotalPoints() const;
+    double getGroupContribution() const;*/
 };

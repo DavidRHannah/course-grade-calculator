@@ -6,26 +6,24 @@
 #include <vector>
 #include <iomanip>
 
-using std::string;
-using std::vector;
-using std::cout;
-using std::cin;
-using std::endl;
-using std::ofstream;
-using std::ifstream;
+using std::string; using std::vector; 
+using std::cout; using std::cin; using std::endl; 
+using std::ofstream; using std::ifstream;
 
 class Assignment
 {
 private:
-	string m_name;
-	float m_pointsEarned;
-	int m_pointTotal;
+    string m_name;
+    double m_pointsEarned;
+    double m_pointTotal;
 public:
-	Assignment(const string& name, float pe, int pt);
-	
-	string getName() const;
-	float getPointsEarned() const;
-	int getPointTotal() const;
+    Assignment(const string& name, double score, double maxScore);
+    Assignment(); 
+    void setName(const string& name);
+    void setPointsEarned(double pe);
+    void setPointTotal(double pt);
 
-	void display() const;
+    string toCSV() const;
+    void fromCSV(const string& csvLine);
+    void display() const;
 };

@@ -1,30 +1,49 @@
 #include "Assignment.h"
 
-Assignment::Assignment(const string& name, float pe, int pt)
+Assignment::Assignment(const string& name, double score, double maxScore)
+    : m_name(name), m_pointsEarned(score), m_pointTotal(maxScore)
+{}
+
+Assignment::Assignment() : m_name(""), m_pointsEarned(0), m_pointTotal(0)
+{}
+
+void Assignment::setName(const string & name)
 {
-	m_name = name;
-	m_pointsEarned = pe;
-	m_pointTotal = pt;
+    m_name = name;
 }
-string Assignment::getName() const
+
+void Assignment::setPointsEarned(double pe)
 {
-	return m_name;
+    m_pointsEarned = pe;
 }
-float Assignment::getPointsEarned() const
+
+void Assignment::setPointTotal(double pt)
 {
-	return m_pointsEarned;
+    m_pointTotal = pt;
 }
-int Assignment::getPointTotal() const
+
+string Assignment::toCSV() const
 {
-	return m_pointTotal;
+    std::ostringstream oss;
+    oss << "\tAssignment," << m_name << "," << m_pointsEarned << "," << m_pointTotal;
+    return oss.str();
 }
+
+void Assignment::fromCSV(const string& csvLine)
+{
+    std::istringstream iss(csvLine);
+    
+    std::string temp;
+    std::getline(iss, temp, ',');
+
+    std::getline(iss, m_name, ',');
+    iss >> m_pointsEarned;
+    iss.ignore();
+    iss >> m_pointTotal;
+}
+
 void Assignment::display() const
 {
-	cout << "\t"
-		<< getName()
-		<< ": "
-		<< getPointsEarned()
-		<< "/"
-		<< getPointTotal()
-		<< endl;
+    cout << "Assignment: " << m_name << ", Score: " << m_pointsEarned
+        << "/" << m_pointTotal << " (" << (m_pointsEarned / m_pointTotal) * 100.0 << "%)\n";
 }

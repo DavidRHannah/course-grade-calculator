@@ -10,13 +10,19 @@
 using std::string;
 using std::vector;
 
-class Quarter {
+class Quarter
+{
 private:
     string m_name;
     vector<Course> m_courses;
 public:
-    Quarter(const string& name);
+    Quarter(const std::string& name, const vector<Course>& courses = {});
+    Quarter();
     void addCourse(const Course& course);
-
+    vector<Course>* getCourses();
+    string getName() const;
+    void setName(const string& name);
+    string toCSV() const;
+    void fromCSV(std::istream& stream);
     void display() const;
-}; 
+};
