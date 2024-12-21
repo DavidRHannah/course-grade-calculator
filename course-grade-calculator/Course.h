@@ -33,6 +33,7 @@ public:
     string toCSV() const;
     void fromCSV(std::istream& stream);
     void display() const;
+    Group* findOrCreateGroup(const std::string& name, double weight);
     /*bool isGroup(const string& groupName) const;
     vector<Group>& getGroups();
     */

@@ -12,7 +12,7 @@ void Quarter::addCourse(const Course& course)
     m_courses.push_back(course);
 }
 
-vector<Course>* Quarter::getCourses()
+vector<Course>* Quarter::getCourses() 
 {
     return &m_courses;
 }
@@ -51,9 +51,20 @@ void Quarter::fromCSV(std::istream& stream)
     }
 }
 
+Course* Quarter::findOrCreateCourse(const std::string& name)
+{
+    for (Course& c : m_courses)
+    {
+        if (c.getName() == name)
+            return &c;
+    }
+    m_courses.emplace_back(name);
+    return &m_courses.back();
+}
+
 void Quarter::display() const
 {
-    cout << "Quarter: " << m_name << "\n";
+    cout << m_name << "\n";
     for (const auto& course : m_courses)
     {
         course.display();

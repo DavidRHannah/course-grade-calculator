@@ -8,6 +8,8 @@ using std::cout;
 using std::cin;
 using std::endl;
 
+const string saveFile = "transcript.csv";
+
 static void addQuarter(Year& year, const string& quarterName)
 {
     Quarter newQuarter(quarterName);
@@ -30,20 +32,12 @@ static void addCourseToQuarter(Year& year, const string& quarterName, const Cour
 }
 
 
-static void displayData(Quarter& q) {
-    q.display();
+static void displayData(Year& y) {
+    cout << "Displaying stored data:" << endl;
+    y.display();
 }
 
-static void saveData(Quarter& q) {
-    
-    cout << "Data saved successfully.\n";
-} 
-
-static void loadData(Quarter& q) {
-    cout << "Data loaded successfully.\n";
-}
-
-static void saveToFile(const Year& year, const std::string& filename)
+static void saveToFile(Year& year, const std::string& filename)
 {
     std::ofstream file(filename);
     if (file.is_open())
@@ -66,9 +60,16 @@ static Year loadFromFile(const std::string& filename)
     return year;
 }
 
+static void saveData(Year& y) {
+    saveToFile(y, saveFile);
+    cout << "Data saved successfully.\n";
+} 
 
+static void loadData(Year& y) {
+    y = loadFromFile(saveFile);
+    cout << "Data loaded successfully.\n";
+}
 int main() {
-    //Year year("2024");
 
     //// Add a quarter
     //addQuarter(year, "Fall 2024");
@@ -108,34 +109,28 @@ int main() {
     //addCourseToQuarter(year, "Fall 2024", cppCourse);
 
     //saveToFile(year, "grades.csv");
+    Year y("2024");
 
-    Year loadedYear = loadFromFile("grades.csv");
-
-    loadedYear.display();
-
-
-    /*std::vector<std::string> labels = {
-        "1. Add Course Data",
+    std::vector<std::string> labels = {
         "2. Display Data",
         "3. Save Data",
         "4. Load Data",
         "5. Exit",
     };
     std::vector<std::function<void()>> actions = {
-        [&]() { addCourseData(q); },
-        [&]() { displayData(q); },
-        [&]() { saveData(q); },
-        [&]() { loadData(q); },
+        [&]() { displayData(y); },
+        [&]() { saveData(y); },
+        [&]() { loadData(y); },
         [&]() { exit(0); },
     };
-    Menu menu(labels, actions);*/
+    Menu menu(labels, actions);
     /*auto data = CSVManager::readCSV("course.csv");
     CSVManager::displayCSV(data);*/
-    /*while (true) 
+    while (true) 
     {
         menu.run(); 
         system("pause");
-    }*/
+    }
 
     return 0;
 }

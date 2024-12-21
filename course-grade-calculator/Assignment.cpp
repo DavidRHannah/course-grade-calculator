@@ -7,6 +7,21 @@ Assignment::Assignment(const string& name, double score, double maxScore)
 Assignment::Assignment() : m_name(""), m_pointsEarned(0), m_pointTotal(0)
 {}
 
+string Assignment::getName()
+{
+    return m_name;
+}
+
+double Assignment::getPointsEarned()
+{
+    return m_pointsEarned;
+}
+
+double Assignment::getPointTotal()
+{
+    return m_pointTotal;
+}
+
 void Assignment::setName(const string & name)
 {
     m_name = name;
@@ -44,6 +59,7 @@ void Assignment::fromCSV(const string& csvLine)
 
 void Assignment::display() const
 {
-    cout << "Assignment: " << m_name << ", Score: " << m_pointsEarned
-        << "/" << m_pointTotal << " (" << (m_pointsEarned / m_pointTotal) * 100.0 << "%)\n";
+    cout << "\t\t" << m_name << "\t" << m_pointsEarned
+        << "/" << m_pointTotal << "\t(" << (m_pointsEarned / m_pointTotal) * 100.0 << "%)\n";
+
 }

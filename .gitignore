@@ -436,3 +436,7 @@ FodyWeavers.xsd
 *.sln.iml
 /course-grade-calculator/course.csv
 /course-grade-calculator/grades.csv
+/course-grade-calculator/out.csv
+/course-grade-calculator/out2.csv
+/course-grade-calculator/out3.csv
+/course-grade-calculator/transcript.csv

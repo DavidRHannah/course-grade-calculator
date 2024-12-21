@@ -18,7 +18,11 @@ private:
     double m_pointTotal;
 public:
     Assignment(const string& name, double score, double maxScore);
-    Assignment(); 
+    Assignment();
+    string getName();
+    double getPointsEarned();
+    double getPointTotal();
+
     void setName(const string& name);
     void setPointsEarned(double pe);
     void setPointTotal(double pt);

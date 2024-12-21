@@ -25,4 +25,5 @@ public:
     string toCSV() const;
     void fromCSV(std::istream& stream);
     void display() const;
+    Course* findOrCreateCourse(const std::string& name);
 };

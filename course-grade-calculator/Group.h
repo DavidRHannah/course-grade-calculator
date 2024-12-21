@@ -22,10 +22,13 @@ private:
     double m_weight;
     vector<Assignment> m_assignments;
 public:
-    Group(const string& name, double weight, const vector<Assignment>& assignments);
+    Group(const string& name, double weight, const vector<Assignment>& assignments = {});
     Group();
+    string getName() const;
+    double getWeight() const;
     void setName(const string& name);
     void setWeight(double weight);
+    vector<Assignment>* getAssignments();
     void addAssignment(const Assignment& assignment);
     string toCSV() const;
     void fromCSV(std::istream& stream);

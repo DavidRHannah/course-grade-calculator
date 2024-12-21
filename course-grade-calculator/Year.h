@@ -14,9 +14,11 @@ private:
 public:
     Year(const string& yearName, const vector<Quarter>& quarters = {});
     Year();
+    void setName(const string& name);
     void addQuarter(const Quarter& quarter);
     Quarter* getQuarter(const string& name);
-    string toCSV() const;
+    string toCSV();
     void fromCSV(const string& filename);
+    Quarter* findOrCreateQuarter(const std::string& name);
     void display() const;
 };

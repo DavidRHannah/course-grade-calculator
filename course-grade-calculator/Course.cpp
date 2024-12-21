@@ -79,9 +79,20 @@ void Course::fromCSV(std::istream& stream)
     }
 }
 
+Group* Course::findOrCreateGroup(const std::string& name, double weight)
+{
+    for (Group& g : m_groups)
+    {
+        if (g.getName() == name)
+            return &g;
+    }
+    m_groups.emplace_back(name, weight);
+    return &m_groups.back();
+}
+
 void Course::display() const
 {
-    std::cout << "Course: " << m_name << "\n";
+    cout << "\t" << m_name << "\n";
     for (const auto& group : m_groups)
     {
         group.display();

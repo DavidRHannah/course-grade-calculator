@@ -8,6 +8,16 @@ Group::Group()
     : m_name(""), m_weight(0.0), m_assignments({})
 {}
 
+string Group::getName() const
+{
+    return m_name;
+}
+
+double Group::getWeight() const
+{
+    return m_weight;
+}
+
 void Group::setName(const string & name)
 {
     m_name = name;
@@ -16,6 +26,11 @@ void Group::setName(const string & name)
 void Group::setWeight(double weight)
 {
     m_weight = weight;
+}
+
+vector<Assignment>* Group::getAssignments()
+{
+    return &m_assignments;
 }
 
 void Group::addAssignment(const Assignment& assignment)
@@ -95,8 +110,7 @@ void Group::fromCSV(std::istream& stream)
 
 void Group::display() const
 {
-    cout << "Group: " << m_name << "\n";
-    cout << "Weight: " << m_weight << "\n";
+    cout << "\t" << m_name << " " << m_weight << "\n";
     for (const auto& assignment : m_assignments)
     {
         assignment.display();
